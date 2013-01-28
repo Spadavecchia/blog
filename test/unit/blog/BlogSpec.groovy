@@ -14,7 +14,8 @@ class BlogSpec extends Specification{
 
     @Before
     void setup() {
-        blog = new Blog()
+        def entries = []
+        blog = new Blog({-> entries})
         post = GroovyMock(Post)
         blog.metaClass.getPostSource = {args -> return post}
     }
@@ -42,39 +43,10 @@ class BlogSpec extends Specification{
 
     @Test
     void "addToEntries add a post role to entries"(){
+        when:
         blog.addToEntries(post)
-        expect:
-        blog.entries.contains(post)
-    }
 
-    private def createStubEntryWithDate(fecha){
-        new Expando(pubdate: Date.parse("yyyy-MM-dd", fecha))
-    }
-
-
-    @Test
-    void "entries sortered by reverse pubdate"(){
-        def oldest = createStubEntryWithDate("2012-01-01")
-        def middle = createStubEntryWithDate("2012-02-02")
-        def young = createStubEntryWithDate("2012-03-03")
-        blog.addToEntries(oldest)
-        blog.addToEntries(middle)
-        blog.addToEntries(young)
-
-        expect:
-        blog.entries == [young, middle, oldest]
-    }
-
-    @Test
-    void "entries limited to 10"(){
-        10.times{
-            blog.addToEntries(createStubEntryWithDate("2010-01-${it+1}"))
-        }
-        expect:
-        blog.entries.size() == 10
-        def oldest = createStubEntryWithDate("2008-01-01")
-        blog.addToEntries(oldest)
-        blog.entries.size() == 10
-        !blog.entries.contains(oldest)
+        then:
+        1 * post.save()
     }
 }

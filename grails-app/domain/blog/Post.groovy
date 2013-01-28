@@ -18,6 +18,10 @@ class Post{
         return true
     }
 
+    static def getLastest(max = 10){
+        return Post.list([max: max, sort: "pubdate", order: "desc"])
+    }
+
     static constraints = {
         title nullable: false, blank: false
         body nullable: true, blank: true, widget: "textarea"

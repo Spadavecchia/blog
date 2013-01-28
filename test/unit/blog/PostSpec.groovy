@@ -17,19 +17,6 @@ class PostSpec extends Specification{
         blog = Mock(Blog)
     }
 
-    def "el absurdo test que prueba que todo inicia en nulo"(){
-        expect:
-        obj.title
-        !obj.body
-        !obj.pubdate
-    }
-
-    def "otro absurdo test para probar que se asigna el blog al post"(){
-        obj.blog = blog
-        expect:
-        obj.blog == blog
-    }
-
     def "cuando se publica el post se agrega a entries del blog"(){
         obj.blog = blog
         when:
@@ -46,7 +33,7 @@ class PostSpec extends Specification{
         post.body == "Body"
     }
 
-    def "un post instancia su pubdate en el momento en el que ejecuta publish"(){
+    def "un post crea su pubdate en el momento en el que ejecuta publish"(){
         Date now = new Date()
         obj.blog = blog
 
@@ -71,10 +58,10 @@ class PostSpec extends Specification{
         obj.publish() == valid
 
         where:
-        title | valid
-        null | false
-        "algo" | true
-        "" | false
+        title   |  valid
+        null    |  false
+        "algo"  |  true
+        ""      |  false
     }
 
     def "hasPicture is true when post has imageUrl and false when not"(){
